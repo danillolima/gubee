@@ -1,2 +1,2 @@
 # Gubee
-Aplicação web que lista os produtos ofecidos pela empresa Gubee Tecnologia.
+Aplicação web que lista os produtos oferecidos pela empresa Gubee Tecnologia.
