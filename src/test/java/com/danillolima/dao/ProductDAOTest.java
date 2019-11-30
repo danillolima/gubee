@@ -6,6 +6,7 @@
 package com.danillolima.dao;
 
 import com.danillolima.models.Product;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ProductDAOTest {
     
     public ProductDAOTest() {
+    
     }
     
     @BeforeAll
@@ -45,12 +47,9 @@ public class ProductDAOTest {
     @Test
     public void testAllProducts() {
         System.out.println("allProducts");
-        ProductDAO instance = new ProductDAO();
-        List<Product> expResult = null;
+        ProductDAO instance = new ProductDAO("Teste");
         List<Product> result = instance.allProducts();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(0, result.size());
     }
 
     /**
@@ -59,15 +58,35 @@ public class ProductDAOTest {
     @Test
     public void testAddProduct() {
         System.out.println("addProduct");
-        Product newProduct = null;
-        ProductDAO instance = new ProductDAO();
-        boolean expResult = false;
+        Product newProduct = new Product();
+        ProductDAO instance = new ProductDAO("Teste");
         boolean result = instance.addProduct(newProduct);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(true, result);
+        assertEquals(1, instance.allProducts().size());
     }
-
-
     
+        /**
+     * Test of searchWithFilters method, of class ProductDAO.
+     */
+    @Test
+    public void testSearchWithFilters() {
+        System.out.println("searchWithFilters");
+        ProductDAO instance = new ProductDAO("Teste");
+        for(int i = 0; i < 5; i++){
+            Product newProduct = new Product();
+            newProduct.setStack(new ArrayList());
+            newProduct.setTargetMarket(new ArrayList());
+            newProduct.getStack().add("Teste "+i);
+            newProduct.getTargetMarket().add("Teste "+i+1);
+            instance.addProduct(newProduct);
+        }
+        List<Product> result = instance.searchWithFilters("Java", "Teste");
+        assertEquals(0, result.size());
+        result = instance.searchWithFilters("Teste 1", "Todos");
+        assertEquals(1, result.size());
+        result = instance.searchWithFilters("Todos", "Todos");
+        assertEquals(5, result.size());
+        result = instance.searchWithFilters("Teste 100", "Todos");
+        assertEquals(0, result.size());
+    }  
 }

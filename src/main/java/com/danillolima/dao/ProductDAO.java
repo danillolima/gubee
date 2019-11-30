@@ -22,48 +22,55 @@ import java.util.stream.Stream;
  * @author Danillo Lima <danillo@alunos.utfpr.edu.br>
  */
 public class ProductDAO {
+
     private List<Product> database;
-    public ProductDAO(){
+
+    public ProductDAO() {
         database = new ArrayList<Product>();
-        try{
+        try {
             BufferedReader br = new BufferedReader(new InputStreamReader(
-            new FileInputStream(System.getProperty("user.dir") + "\\database.json"), "UTF-8"));
-            String st, content ="";
-            while ((st = br.readLine()) != null){ 
-              content += st;
+                    new FileInputStream(System.getProperty("user.dir") + "\\database.json"), "UTF-8"));
+            String st, content = "";
+            while ((st = br.readLine()) != null) {
+                content += st;
             }
             Gson gson = new Gson();
-            try{
+            try {
                 Product products[] = gson.fromJson(content, Product[].class);
-                for(Product temp: products){
+                for (Product temp : products) {
                     database.add(temp);
                 }
-            }catch(JsonSyntaxException e){
+            } catch (JsonSyntaxException e) {
                 System.out.println(e);
             }
-           
-        } catch(Exception e){
+
+        } catch (Exception e) {
             System.out.println("Erro lendo arquivo");
         }
-    } 
-    public List<Product> allProducts(){
-       return database;
     }
-    
-    public boolean addProduct(Product newProduct){
+
+    public ProductDAO(String teste) {
+        database = new ArrayList<Product>();
+    }
+
+    public List<Product> allProducts() {
+        return database;
+    }
+
+    public boolean addProduct(Product newProduct) {
         database.add(newProduct);
         return true;
     }
-    
-    public List<Product> searchWithFilters(String stack, String market){
+
+    public List<Product> searchWithFilters(String stack, String market) {
         List<Product> products;
         products = new ArrayList<Product>();
         Stream<Product> streamDatabase = database.stream();
-        products = streamDatabase.filter(!stack.contentEquals("Todos") ?
-                p -> p.getStack().contains(stack) : p -> true)
-                .filter(!market.contentEquals("Todos") ?
-                p -> p.getTargetMarket().contains(market) : p->true)
+        products = streamDatabase.filter(!stack.contentEquals("Todos")
+                ? p -> p.getStack().contains(stack) : p -> true)
+                .filter(!market.contentEquals("Todos")
+                        ? p -> p.getTargetMarket().contains(market) : p -> true)
                 .collect(Collectors.toList());
         return products;
-    }   
+    }
 }
